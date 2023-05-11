@@ -68,6 +68,7 @@ describe('Tests for: UC-206', function () {
                                         expect(res.body.message).to.equal(
                                             `User met id ${userId} is verwijderd`
                                         );
+                                    done()
                                     });
                             }
                         });
