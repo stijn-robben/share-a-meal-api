@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
-    "test": "mocha test/**/*.test.js --exit"
+    "test": "./node_modules/mocha/bin/mocha test/**/*.test.js --exit --DB_PASSWORD=root --DB_USER=root --DB_NAME=share_a_meal"
   },
   "keywords": [
     "javascript",
