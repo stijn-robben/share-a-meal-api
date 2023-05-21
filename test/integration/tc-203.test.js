@@ -25,7 +25,7 @@ describe('Test cases voor UC-203', function () {
             .end((err, res) => {
                 expect(res.body.status).to.equal(200);
                 expect(res.body.message).to.contain('is gevonden!');
-                expect(res.body.data).to.be.an('object')
+                expect(res.body.data).to.be.an('array')
                 done();
             });
     });
