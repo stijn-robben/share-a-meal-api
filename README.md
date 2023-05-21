@@ -1,6 +1,5 @@
-# share-a-meal-api
+# Share-a-Meal API
 
-Share-a-Meal API
 Dit project richt zich op het creëren van een systeem genaamd Share-a-Meal, met als doel het vergemakkelijken van gedeelde maaltijden om sociale verbindingen tussen mensen te versterken. Het project begint op kleine schaal om de haalbaarheid en potentie van het concept te onderzoeken.
 
 Het systeem bestaat uit een website of mobiele applicatie, dat gebruikers in staat stelt om zich te registreren en maaltijden aan te bieden. Een maaltijd wordt gepresenteerd met informatie zoals een beschrijving, afbeelding en details over vegetarische of veganistische opties. Andere gebruikers kunnen zich aanmelden om deel te nemen aan de maaltijd tegen een kleine vergoeding.
