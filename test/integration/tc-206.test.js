@@ -1,8 +1,8 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const app = require('../../index');
-
-const logger = require('../../src/util/utils').logger;
+const jwt = require('jsonwebtoken');
+const { jwtSecretKey, logger } = require('../../src/util/utils');
 const pool = require('../../src/util/mysql-db');
 
 chai.use(chaiHttp);
@@ -12,6 +12,7 @@ describe('Tests for: UC-206', function () {
     it('TC-206-1: user does not exist', (done) => {
         chai.request(app)
             .delete('/api/user/-1')
+            .set('authorization', 'Bearer ' + jwt.sign({ userId: -1 }, jwtSecretKey))
             .end((err, res) => {
                 expect(res.body.status).to.equal(404);
                 expect(res.body.message).to.equal('User not found');
@@ -63,6 +64,7 @@ describe('Tests for: UC-206', function () {
                                 const userId = results.insertId;
                                 chai.request(app)
                                     .delete(`/api/user/${userId}`)
+                                    .set('authorization', 'Bearer ' + jwt.sign({ userId: results.insertId }, jwtSecretKey))
                                     .end((err, res) => {
                                         expect(res.body.status).to.equal(200);
                                         expect(res.body.message).to.equal(

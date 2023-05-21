@@ -190,7 +190,7 @@ const userController = {
   //UC 203
   getProfile: (req, res) => {
     logger.info('UC-203');
-    //Hier moet code komen die ervoor zorgt dat de id word opgevraag van de user als hij is ingelogd.
+    const id = req.userId;
     let query = 'SELECT * FROM user WHERE id =' + id
     pool.getConnection(function (err, conn) {
       if (err) {
@@ -223,9 +223,11 @@ const userController = {
 // UC 204
 getUserWithID: (req, res, next) => {
   logger.info('UC-204');
-
+  
   const userId = parseInt(req.params.userId);
-  const userQuery = 'SELECT * FROM user WHERE id = ?';
+  const id = req.userId;
+  const userQueryWithPassword = 'SELECT * FROM user WHERE id = ?';
+  const userQueryWithoutPassword = 'SELECT id, emailAdress, firstName, lastName, isActive, phoneNumber, roles, street FROM user WHERE id = ?';
   pool.getConnection(function (err, conn) {
       if (err) {
           next({
@@ -234,8 +236,8 @@ getUserWithID: (req, res, next) => {
               data: {}
           });
       }
-      if (conn) {
-          conn.query(userQuery, [userId], function (err, results) {
+      if (conn && userId === id) {
+          conn.query(userQueryWithPassword, [userId], function (err, results) {
               if (err) {
                   next({
                       status: 500,
@@ -262,29 +264,55 @@ getUserWithID: (req, res, next) => {
           });
           pool.releaseConnection(conn);
       }
+      
+      if (conn && userId !== id) {
+        conn.query(userQueryWithoutPassword, [userId], function (err, results) {
+            if (err) {
+                next({
+                    status: 500,
+                    message: 'Error executing query',
+                    data: {}
+                });
+                return;
+            }
+            if (results && results.length > 0) {
+                logger.info('Found user with id', userId);
+                const user = results[0];
+                res.status(200).json({
+                    status: 200,
+                    message: `Gebruiker met id ${userId} is gevonden`,
+                    data: user,
+                });
+            } else {
+                next({
+                    status: 404,
+                    message: `Gebruiker met id ${userId} kan niet gevonden worden...`,
+                });
+                return;
+            }
+        });
+        pool.releaseConnection(conn);
+    }
   });
 },
 
   // UC 205
   updateUser: (req, res, next) => {
     logger.info('UC-205');
-
-    const userId = parseInt(req.params.userId);
+    const id = req.userId;
+    const userId = parseInt(req.params.userId)
+    console.info('id en userId: ' + id + ' ' + userId)
+    if(id !== userId){
+      next({
+        status: 401,
+        message: 'Not authorized',
+    });
+    return;
+    }
     logger.debug('userId = ', userId);
-
     const userUpdates = req.body;
 
-    try {
-        
-        assert(userId != null, 'userId is missing');
-        assert(typeof userId === 'number', 'userId must be a number');
-    } catch (err) {
-        next({
-            status: 400,
-            message: err.message,
-        });
-        return;
-    }
+
 
     if (userUpdates.phoneNumber) {
       const phoneRegex = /^\+[1-9]\d{0,2}\d{1,14}$/ //volgens E.164
@@ -297,16 +325,16 @@ getUserWithID: (req, res, next) => {
       }
   }
 
-    const emailRegex = /\S+@\S+\.\S+/;
-    if (!emailRegex.test(userUpdates.emailAddress)) {
-         next({
-             status: 400,
-             message: 'Invalid emailAddress',
-         });
-         return;
-   }
-
-
+  const emailRegex = /\S+@\S+\.\S+/;
+  if(req.body.emailAdress){
+    if(!emailRegex.test(req.body.emailAdress)){
+      next({
+        status: 400,
+        message: 'Invalid emailAdress',
+      });
+      return;
+    }
+  }
     const userQuery = 'SELECT * FROM user WHERE id = ?';
 
     pool.getConnection((err, conn) => {
@@ -372,8 +400,18 @@ getUserWithID: (req, res, next) => {
   //UC 206
   deleteUser: (req, res, next) => {
     logger.info('UC-206');
+    const id = req.userId;
+    const userId = parseInt(req.params.userId)
+    console.info('id en userId: ' + id + ' ' + userId)
+    if(id !== userId){
+      next({
+        status: 401,
+        message: 'Not authorized',
+    });
+    return;
+    }
 
-    const userId = parseInt(req.params.userId);
+    
 
     const deleteQuery = 'DELETE FROM user WHERE id = ?';
 
