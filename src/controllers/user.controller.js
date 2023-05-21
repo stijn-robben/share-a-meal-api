@@ -258,6 +258,7 @@ getUserWithID: (req, res, next) => {
                   next({
                       status: 404,
                       message: `Gebruiker met id ${userId} kan niet gevonden worden...`,
+                      data: {}
                   });
                   return;
               }
@@ -287,6 +288,7 @@ getUserWithID: (req, res, next) => {
                 next({
                     status: 404,
                     message: `Gebruiker met id ${userId} kan niet gevonden worden...`,
+                    data: {}
                 });
                 return;
             }
@@ -306,6 +308,7 @@ getUserWithID: (req, res, next) => {
       next({
         status: 401,
         message: 'Not authorized',
+        data: {}
     });
     return;
     }
@@ -320,6 +323,7 @@ getUserWithID: (req, res, next) => {
            next({
            status: 400,
            message: 'Invalid phoneNumber',
+           data: {}
           });
           return;
       }
@@ -331,6 +335,7 @@ getUserWithID: (req, res, next) => {
       next({
         status: 400,
         message: 'Invalid emailAdress',
+        data: {}
       });
       return;
     }
@@ -360,6 +365,7 @@ getUserWithID: (req, res, next) => {
                     next({
                         status: 404,
                         message: `User met id ${userId} kan niet gevonden worden`,
+                        data: {}
                     });
                     return;
                 }
@@ -380,6 +386,7 @@ getUserWithID: (req, res, next) => {
                         next({
                             status: 500,
                             message: 'Error executing query: ' + err,
+                            data: {}
                         });
                         return;
                     }
@@ -407,6 +414,7 @@ getUserWithID: (req, res, next) => {
       next({
         status: 401,
         message: 'Not authorized',
+        data: {}
     });
     return;
     }

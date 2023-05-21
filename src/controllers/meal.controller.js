@@ -240,6 +240,7 @@ getAllMeals: (req, res, next) => {
                     next({
                         status: 404,
                         message: `Meal met id ${mealId} kan niet gevonden worden...`,
+                        data: {}
                     });
                     return;
                 }
@@ -281,6 +282,7 @@ getAllMeals: (req, res, next) => {
                     next({
                         status: 401,
                         message: 'Not authorized',
+                        data: {}
                     });
                     return;
                 } else {

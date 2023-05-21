@@ -39,7 +39,8 @@ module.exports = {
             console.error(error);
             return next({
               status: 500,
-              message: 'Error ' + error
+              message: 'Error ' + error,
+              data: {}
             });
           }
   
@@ -48,7 +49,8 @@ module.exports = {
             logger.info('User not found')
             return next({
                 status: 401,
-              message: 'Not Authorized'
+              message: 'Not Authorized',
+              data: {}
             });
           }
   
@@ -59,7 +61,8 @@ module.exports = {
               console.error(error);
               return next({
                 status: 500,
-                message: 'Error ' + error
+                message: 'Error ' + error,
+                data: {}
               });
             }
   
@@ -68,7 +71,8 @@ module.exports = {
               logger.info('Password not found')
               return next({
                 status: 401,
-                message: 'Not Authorized'
+                message: 'Not Authorized',
+                data: {}
               });
             }
   
@@ -78,7 +82,8 @@ module.exports = {
                 logger.info('Passwords dont match')
               return next({
                 status: 401,
-                message: 'Not Authorized'
+                message: 'Not Authorized',
+                data: {}
               });
             }
   
